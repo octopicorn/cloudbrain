@@ -5,7 +5,7 @@ from functools import wraps
 import re
 import time
 
-from cassandra.cluster import Cluster
+#from cassandra.cluster import Cluster
 from flask import Flask, render_template, request, redirect, current_app
 
 # add the shared settings file to namespace
@@ -27,8 +27,8 @@ sp_config_cache = {
 }
 
 # configure cassandra cluster
-cluster = Cluster()
-session = cluster.connect('users')
+#cluster = Cluster()
+#session = cluster.connect('users')
 
 def support_jsonp(f):
     """Wraps JSONified output for JSONP"""
@@ -92,6 +92,7 @@ def doc():
 def spacebrew():
     return redirect("http://spacebrew.github.io/spacebrew/admin/admin.html?server=cloudbrain.rocks")
 
+'''
 @app.route('/form-content', methods = ['POST'])
 def form_content():
     # Get the parsed contents of the form data
@@ -114,6 +115,7 @@ def form_content():
 
 
     return r, 200
+'''
 
 @app.route("/set_tag", methods=['GET'])
 @support_jsonp

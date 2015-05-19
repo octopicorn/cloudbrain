@@ -90,7 +90,7 @@ class SpacebrewServer(object):
                 spacebrew_name = self.calculate_spacebrew_name(path['address'])
                 args = [random.random()] * path['arguments']
                 value = ','.join([str(arg) for arg in args])
-
+                print value
                 message = {"message": {
                     "value": value,
                     "type": "string", "name": spacebrew_name, "clientName": 'muse-%s' % self.muse_id}}

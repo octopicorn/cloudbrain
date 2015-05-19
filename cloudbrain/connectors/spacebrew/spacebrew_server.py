@@ -12,8 +12,6 @@ To start MuseIO, open a terminal or command prompt and type:
 muse-io --osc osc.udp://localhost:9090
 
 """
-from cloudbrain import settings
-
 __author__ = 'marion'
 
 from liblo import ServerThread, make_method
@@ -24,7 +22,7 @@ import sys
 from os.path import dirname, abspath
 
 sys.path.insert(0, dirname(dirname(dirname(dirname(abspath(__file__))))))
-
+from cloudbrain import settings
 from cloudbrain.spacebrew.spacebrew import SpacebrewApp
 
 import logging
@@ -38,12 +36,12 @@ logger.addHandler(handler)
 
 logger = logging.getLogger("connectors")
 
-
 class SpacebrewServer(ServerThread):
     def __init__(self, muse_port, muse_id, server):
 
         self.muse_port = muse_port
         self.muse_id = muse_id
+        self.counter = 0
 
         # Configuring the Muse OSC client
         ServerThread.__init__(self, muse_port)
@@ -112,9 +110,11 @@ class SpacebrewServer(ServerThread):
         if path in self.osc_paths:
             spacebrew_name = self.calculate_spacebrew_name(path)
             value = ','.join([str(arg) for arg in args])
+            if self.counter % 100 == 0:
+                print value
             self.brew.publish(spacebrew_name, value)
+            self.counter += 1
             # logger.debug('Muse with ID %s is publishing to spacebrew. Publisher name: %s. Data: %s' (self.muse_id, spacebrew_name, value))
-
 
     def calculate_spacebrew_name(self, osc_path):
         spacebrew_name = osc_path.split('/')[-1]

@@ -249,7 +249,7 @@ h1.title {
   float: left;
   margin: 0;
   height: 160px;
-  width: 229px;
+  width: 299px;
   margin-bottom: 3px;
   margin-top: 3px;
   margin-left: 13px;
@@ -327,8 +327,8 @@ body.main .legends p{
 body.main .container .radar {
   margin: 0;
   margin-bottom: 5px;
-  height: 180px;
-  width: 180px;
+  height: 480px;
+  width: 480px;
   margin-left: 15px;
   background: rgba(0, 0, 0, 0.71);
   border: none;
