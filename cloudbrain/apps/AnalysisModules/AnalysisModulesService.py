@@ -13,7 +13,7 @@ _SUPPORTED_DEVICES = get_supported_devices()
 _SUPPORTED_METRICS = get_supported_metrics()
 
 
-class Workbench(object):
+class AnalysisModulesService(object):
     """
     Subscribes and writes data to a file
     Only supports Pika communication method for now, not pipes
@@ -24,17 +24,33 @@ class Workbench(object):
         if rabbitmq_address is None:
             raise ValueError("Pika subscriber needs to have a rabbitmq address!")
 
-        # get config from yaml file (default = ./conf.yml)
+        # set vars
+        self.device_name = device_name
+        self.device_id = device_id
+        self.rabbitmq_address = rabbitmq_address
+
+        # local relative filepath, used to load config file and to dynamically load classes
         self.location = os.path.realpath( os.path.join(os.getcwd(), os.path.dirname(__file__)) )
+
+        # this will hold the config yaml info as an array
+        self.conf = None
+
+        # setup more vars
+        self.setup()
+
+    def setup(self):
+
+        # get config from yaml file (default = ./conf.yml)
         settings_file_path = os.path.join(self.location, 'conf.yml')
         stream = file(settings_file_path, 'r')
+        # set local conf property from the yaml config file
+        self.conf = yaml.load(stream)
 
-        # get the module chain config from the yaml
-        chain = yaml.load(stream)
+    def start(self):
 
         # loop through each module and start them
         # passing the output from one to the input of the other
-        for moduleName,settings in chain.iteritems():
+        for moduleName,settings in self.conf.iteritems():
 
             # input_feature is required
             if 'input_feature' in settings:
@@ -54,7 +70,7 @@ class Workbench(object):
             else:
                 module_params = None
 
-            self.launchModule(moduleName, device_name, device_id, rabbitmq_address, input_feature, output_feature, module_params)
+            self.launchModule(moduleName, self.device_name, self.device_id, self.rabbitmq_address, input_feature, output_feature, module_params)
 
         # this is here so that child threads
         while True:
@@ -128,10 +144,11 @@ def run(device_name='muse',
         cloudbrain_address=RABBITMQ_ADDRESS
         ):
     print "Collecting data ... Ctl-C to stop."
-    workbench = Workbench(device_name=device_name,
+    service = AnalysisModulesService(device_name=device_name,
                           device_id=device_id,
                           rabbitmq_address=cloudbrain_address
                           )
+    service.start()
 
 
 if __name__ == "__main__":

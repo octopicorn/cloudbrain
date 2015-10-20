@@ -6,6 +6,11 @@ import imp
 import json
 import threading
 
+########################################
+# this is just a "scratch pad" file to test with
+# probably should be excluded from github repo, but just leaving it in for now...
+
+
 from cloudbrain.utils.metadata_info import get_num_channels, get_supported_metrics, get_supported_devices
 from cloudbrain.apps.AnalysisModules.utils import json_numpy_obj_hook, NumpyEncoder
 
