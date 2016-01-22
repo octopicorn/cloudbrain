@@ -62,15 +62,16 @@ if __name__ == "__main__":
 
   metric_names = get_metrics_names(device_name)
 
+  #while 1:
+  #for metric in metric_names:
+  #  print metric
+  subscriber = PikaSubscriber(device_name, device_id, host, "eeg")
+  subscriber.connect()
   while 1:
-    for metric in metric_names:
-      print metric
-      subscriber = PikaSubscriber(device_name, device_id, host, metric)
-      subscriber.connect()
-      #subscriber.consume_messages(_print_message)
-      buffer = json.loads(subscriber.get_one_message())
-      for record in buffer:
-        print record
+    subscriber.consume_messages(_print_message)
+      # buffer = json.loads(subscriber.get_one_message())
+      # for record in buffer:
+      #   print record
 
 
 

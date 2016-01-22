@@ -33,6 +33,7 @@ class PikaPublisher(Publisher):
     self.channel = self.connection.channel()
 
     key = "%s:%s:%s" % (self.device_id, self.device_name, self.metric_name)
+
     self.channel.exchange_declare(exchange=key,
                                   type='direct')
 
